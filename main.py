@@ -16,7 +16,6 @@ while True:
             dfs = DeepFace.find(frame, './database/', model_name='VGG-Face', enforce_detection=False, distance_metric="euclidean_l2")
             for df in dfs:
                 if len(df.index) > 0:
-                    print(df)
                     face_area = {
                         'x': df['source_x'].loc[df.index[0]],
                         'y': df['source_y'].loc[df.index[0]],
