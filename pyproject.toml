@@ -11,6 +11,7 @@ package-mode = false
 python = "^3.12"
 deepface = "^0.0.89"
 tf-keras = "^2.16.0"
+tensorflow-intel = {version="^2.16.1", platform="win32"}
 
 
 [build-system]
