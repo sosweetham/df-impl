@@ -23,10 +23,22 @@ while True:
                         'h': df['source_h'].loc[df.index[0]],
                         'identity': df['identity'].loc[df.index[0]]
                     }
+                    face_crop = frame[face_area['y']:face_area['y']+face_area['h'], face_area['x']:face_area['x']+face_area['w']]
                     name = face_area['identity'].split('/')[-1].split('\\')[-1].split('_')[0]
+                    try:
+                        objs = DeepFace.analyze(face_crop, ['age', 'gender', 'race', 'emotion'])
+                        details_text = ""
+                        for obj in objs:
+                            cv2.putText(face_crop, f'age: {obj['age']}', (0,70), fontFace=cv2.FONT_HERSHEY_PLAIN, fontScale=1, color=(255,0,0))
+                            cv2.putText(face_crop, f'gender: {obj['dominant_gender']}', (0,80), fontFace=cv2.FONT_HERSHEY_PLAIN, fontScale=1, color=(255,0,0))
+                            cv2.putText(face_crop, f'race: {obj['dominant_race']}', (0,90), fontFace=cv2.FONT_HERSHEY_PLAIN, fontScale=1, color=(255,0,0))
+                            cv2.putText(face_crop, f'emotion: {obj['dominant_emotion']}', (0,100), fontFace=cv2.FONT_HERSHEY_PLAIN, fontScale=1, color=(255,0,0))
+                    except Exception as e:
+                        continue
+                    cv2.imshow(name, face_crop)
                     cv2.rectangle(frame, (face_area['x'],face_area['y']), (face_area['x']+face_area['w'],face_area['y']+face_area['h']), (0,255,0), thickness=3, lineType=cv2.LINE_8)
                     cv2.putText(frame, name, (face_area['x'],face_area['y']+face_area['h']), fontFace=cv2.FONT_HERSHEY_COMPLEX, fontScale=1.5, color=(0,255,0))
-    cv2.imshow("frame", frame)
+    cv2.imshow("stream", frame)
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break 
 
